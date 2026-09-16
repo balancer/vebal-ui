@@ -89,13 +89,6 @@ export function LockOverview({ data }: { data: LockData }) {
               </div>
             </div>
           </div>
-
-          {!lock.isExpired && (
-            <div className="warning-box" style={{ marginTop: 12 }}>
-              This lock is still active. <span className="mono">withdraw()</span> reverts until{' '}
-              {fmtDate(lock.lockedEndDate)} — there is no early exit. Come back after that date.
-            </div>
-          )}
         </>
       )}
 
