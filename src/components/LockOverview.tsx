@@ -9,11 +9,6 @@ export function LockOverview({ data }: { data: LockData }) {
   const [watchInput, setWatchInput] = useState('')
   const { lock, bptBalance, bptTotalSupply, loading, error, refresh } = data
 
-  // Elapsed fraction of the lock term, for the timeline bar.
-  const totalTerm = lock && lock.hasLock ? Number(lock.end) * 1000 - (lock.lockedEndDate - lock.secondsRemaining * 1000) : 0
-  const elapsed = lock && lock.hasLock ? totalTerm - lock.secondsRemaining * 1000 : 0
-  const progress = totalTerm > 0 ? Math.min(1, Math.max(0, elapsed / totalTerm)) : 0
-
   return (
     <div className="card">
       <div className="row-between" style={{ flexWrap: 'wrap' }}>
@@ -82,12 +77,6 @@ export function LockOverview({ data }: { data: LockData }) {
 
       {lock?.hasLock && (
         <>
-          <div className="timeline">
-            <div
-              className={`timeline-fill${lock.isExpired ? ' expired' : ''}`}
-              style={{ width: `${(lock.isExpired ? 1 : progress) * 100}%` }}
-            />
-          </div>
           <div className="stat-grid">
             <div className="stat">
               <div className="stat-label">Locked BPT</div>
