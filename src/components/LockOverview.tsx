@@ -9,8 +9,6 @@ export function LockOverview({ data }: { data: LockData }) {
   const [watchInput, setWatchInput] = useState('')
   const { lock, bptBalance, bptTotalSupply, loading, error, refresh } = data
 
-  const share = lock && lock.totalSupply > 0n ? Number(lock.votingPower) / Number(lock.totalSupply) : 0
-
   // Elapsed fraction of the lock term, for the timeline bar.
   const totalTerm = lock && lock.hasLock ? Number(lock.end) * 1000 - (lock.lockedEndDate - lock.secondsRemaining * 1000) : 0
   const elapsed = lock && lock.hasLock ? totalTerm - lock.secondsRemaining * 1000 : 0
@@ -90,23 +88,10 @@ export function LockOverview({ data }: { data: LockData }) {
               style={{ width: `${(lock.isExpired ? 1 : progress) * 100}%` }}
             />
           </div>
-          <div className="timeline-labels">
-            <span>locked {fmtAmount(lock.amount, 18)} BPT</span>
-            <span>{lock.isExpired ? 'unlockable now' : `unlocks ${fmtDate(lock.lockedEndDate)}`}</span>
-          </div>
-
           <div className="stat-grid">
             <div className="stat">
               <div className="stat-label">Locked BPT</div>
               <div className="stat-value">{fmtAmount(lock.amount, 18)}</div>
-            </div>
-            <div className="stat">
-              <div className="stat-label">Voting power</div>
-              <div className="stat-value">{fmtAmount(lock.votingPower, 18)} veBAL</div>
-            </div>
-            <div className="stat">
-              <div className="stat-label">Share of veBAL</div>
-              <div className="stat-value">{fmtPct(share)}</div>
             </div>
             <div className="stat">
               <div className="stat-label">Unlock date</div>

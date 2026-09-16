@@ -39,8 +39,7 @@ export function UnlockCard({ data }: { data: LockData }) {
             <span className="badge badge-orange">locked until {fmtDate(lock.lockedEndDate)}</span>
           )}
         </div>
-        <div className="mono">{fmtAmount(lock.amount, 18)} BPT returned</div>
-      </div>
+        </div>
 
       {!lock.isExpired ? (
         <div className="warning-box" style={{ marginTop: 12 }}>
