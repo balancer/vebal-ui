@@ -172,6 +172,7 @@ const chain = defineChain({
   name: 'Ethereum',
   nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
   rpcUrls: { default: { http: [rpc] } },
+  contracts: { multicall3: { address: '0xca11bde05977b3631167028862be2a173976ca11' } },
 })
 
 const client = createPublicClient({ chain, transport: http(rpc, { timeout: 30_000 }) })
@@ -284,19 +285,21 @@ amountsOut.forEach((a, i) => {
 })
 check('quote returns non-zero amounts', amountsOut.some((a) => a > 0n))
 
-// 5. simulate the real exit with 0.5%-tight minimums
+// 5. simulate the real exit with 0.5%-tight minimums.
+// The holder has no BPT until withdraw() runs, so the exit is simulated from the
+// vault itself — it holds the escrowed BPT and is a valid sender for the same call.
 console.log('\nexit simulation')
 const minAmountsOut = amountsOut.map((a) => (a * 9950n) / 10_000n)
 try {
   await client.simulateContract({
-    account: address,
+    account: VAULT,
     address: VAULT,
     abi: vaultAbi,
     functionName: 'exitPool',
     args: [
       POOL_ID,
-      address,
-      address,
+      VAULT,
+      VAULT,
       { assets: tokens, minAmountsOut, userData, toInternalBalance: false },
     ],
   })
