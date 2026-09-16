@@ -36,7 +36,7 @@ export function BptExitCard({ data }: { data: LockData }) {
     <div className="card">
       <div className="row-between" style={{ flexWrap: 'wrap' }}>
         <div>
-          <strong>Exit 80BAL-20WETH BPT</strong> <span className="badge">Balancer v2</span>
+          <strong>Exit 80BAL-20WETH BPT</strong>
         </div>
         <div className="mono">{fmtAmount(bptBalance, 18)} BPT</div>
       </div>
