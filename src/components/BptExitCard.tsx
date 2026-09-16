@@ -34,14 +34,11 @@ export function BptExitCard({ data }: { data: LockData }) {
 
   return (
     <div className="card">
-      <div className="row-between" style={{ flexWrap: 'wrap' }}>
-        <div>
-          <strong>Exit 80BAL-20WETH BPT</strong>
-            <div className="muted" style={{ marginTop: 4 }}>
-              Proportional exit — you receive BAL and WETH in the pool's ratio. No auto-unwrap.
-            </div>
-        </div>
-          <div className="mono">{fmtAmount(bptBalance, 18)} BPT</div>
+      <div className="row" style={{ flexWrap: 'wrap' }}>
+        <strong>Exit 80BAL-20WETH BPT</strong>
+          <span className="muted">
+            Proportional exit — you receive BAL and WETH in the pool's ratio. No auto-unwrap.
+          </span>
         </div>
 
       {quoting && (
@@ -79,10 +76,11 @@ export function BptExitCard({ data }: { data: LockData }) {
         </table>
       )}
 
-      <div className="row" style={{ marginTop: 12, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-        <button className="btn-primary" style={{ minWidth: 160 }} disabled>
-          Exit BPT
-        </button>
+      <div className="row-between" style={{ marginTop: 12, flexWrap: 'wrap' }}>
+        <div className="mono">{fmtAmount(bptBalance, 18)} BPT</div>
+          <button className="btn-primary" style={{ minWidth: 160 }} disabled>
+            Exit BPT
+          </button>
       </div>
     </div>
   )

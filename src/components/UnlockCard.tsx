@@ -8,23 +8,21 @@ export function UnlockCard({ data }: { data: LockData }) {
 
   return (
     <div className="card">
-      <div className="row-between" style={{ flexWrap: 'wrap' }}>
-        <div>
-          <strong>Unlock</strong>{' '}
+      <div className="row" style={{ flexWrap: 'wrap' }}>
+        <strong>Unlock</strong>
           {lock.isExpired && <span className="badge badge-green">available</span>}
-          <div className="muted" style={{ marginTop: 4 }}>
-            Unlocking burns your veBAL position and returns {fmtAmount(lock.amount, 18)} BPT
+          <span className="muted">
+          Unlocking burns your veBAL position and returns {fmtAmount(lock.amount, 18)} BPT
             (80BAL-20WETH) to your wallet.
-          </div>
+          </span>
         </div>
-        <div className="mono">{fmtAmount(lock.amount, 18)} BPT</div>
-      </div>
 
-      <div className="row" style={{ marginTop: 12, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+        <div className="row-between" style={{ marginTop: 12, flexWrap: 'wrap' }}>
+          <div className="mono">{fmtAmount(lock.amount, 18)} BPT</div>
         <button className="btn-primary" style={{ minWidth: 160 }} disabled>
-          Unlock veBAL
+            Unlock veBAL
         </button>
-      </div>
+        </div>
     </div>
   )
 }
