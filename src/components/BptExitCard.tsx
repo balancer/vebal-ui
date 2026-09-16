@@ -77,7 +77,7 @@ export function BptExitCard({ data }: { data: LockData }) {
       )}
 
       <div className="row-between" style={{ marginTop: 12, flexWrap: 'wrap' }}>
-        <div className="mono">{fmtAmount(bptBalance, 18)} BPT</div>
+        <div className="amount">{fmtAmount(bptBalance, 18)} BPT</div>
           <button className="btn-primary" style={{ minWidth: 160 }} disabled>
             Exit BPT
           </button>

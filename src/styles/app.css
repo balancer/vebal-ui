@@ -241,6 +241,13 @@ table.amounts th {
   margin-top: 2px;
 }
 
+/* amount shown in a card's action row, matching .stat-value */
+.amount {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);

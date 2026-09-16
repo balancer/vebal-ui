@@ -18,7 +18,7 @@ export function UnlockCard({ data }: { data: LockData }) {
         </div>
 
         <div className="row-between" style={{ marginTop: 12, flexWrap: 'wrap' }}>
-          <div className="mono">{fmtAmount(lock.amount, 18)} BPT</div>
+          <div className="amount">{fmtAmount(lock.amount, 18)} BPT</div>
         <button className="btn-primary" style={{ minWidth: 160 }} disabled>
             Unlock veBAL
         </button>
