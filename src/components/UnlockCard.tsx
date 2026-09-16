@@ -22,12 +22,11 @@ export function UnlockCard({ data }: { data: LockData }) {
 
       <div className="muted" style={{ marginTop: 12 }}>
         Unlocking burns your veBAL position and returns {fmtAmount(lock.amount, 18)} BPT
-        (80BAL-20WETH) to your wallet. Voting power drops to zero immediately. This cannot be
-        undone — re-locking means a new lock term.
-      </div>
+        (80BAL-20WETH) to your wallet.
+        </div>
 
-      <div className="row" style={{ marginTop: 12, flexWrap: 'wrap' }}>
-        <button className="btn-primary" disabled>
+      <div className="row" style={{ marginTop: 12, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+        <button className="btn-primary" style={{ minWidth: 160 }} disabled>
           Unlock veBAL
         </button>
       </div>
