@@ -12,13 +12,12 @@ export function UnlockCard({ data }: { data: LockData }) {
         <div>
           <strong>Unlock</strong>{' '}
           {lock.isExpired && <span className="badge badge-green">available</span>}
+          <div className="muted" style={{ marginTop: 4 }}>
+            Unlocking burns your veBAL position and returns {fmtAmount(lock.amount, 18)} BPT
+            (80BAL-20WETH) to your wallet.
           </div>
-          <div className="mono">{fmtAmount(lock.amount, 18)} BPT</div>
         </div>
-
-        <div className="muted" style={{ marginTop: 12 }}>
-        Unlocking burns your veBAL position and returns {fmtAmount(lock.amount, 18)} BPT
-          (80BAL-20WETH) to your wallet.
+        <div className="mono">{fmtAmount(lock.amount, 18)} BPT</div>
       </div>
 
       <div className="row" style={{ marginTop: 12, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
