@@ -9,11 +9,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          viem: ['viem'],
+        // Vite 8 (rolldown) requires the function form.
+          manualChunks(id) {
+          if (id.includes('node_modules/viem') || id.includes('node_modules/ox')) return 'viem'
+            if (id.includes('node_modules/react')) return 'vendor'
+          },
         },
       },
-    },
   },
 })
