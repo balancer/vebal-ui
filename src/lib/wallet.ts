@@ -13,13 +13,6 @@ function legacyProvider(): Eip1193Provider | null {
   return eth
 }
 
-let selectedId: string | null = null
-
-/** Pin the wallet used for connect/sign. `null` clears the choice. */
-export function selectWallet(id: string | null): void {
-  selectedId = id
-}
-
 type Eip1193Provider = {
   request: (args: { method: string; params?: unknown[] | object }) => Promise<unknown>
   on?: (event: string, handler: (...args: any[]) => void) => void
@@ -64,12 +57,7 @@ export function listWallets(): WalletEntry[] {
 
 function pickProvider(): Eip1193Provider | null {
   const wallets = listWallets()
-  if (wallets.length === 0) return null
-  if (selectedId) {
-    const chosen = wallets.find((w) => w.id === selectedId)
-    if (chosen) return chosen.provider
-  }
-  return wallets[0].provider
+  return wallets.length > 0 ? wallets[0].provider : null
 }
 
 

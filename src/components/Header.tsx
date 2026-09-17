@@ -22,19 +22,19 @@ export function Header() {
           <button className="btn-secondary" onClick={() => setShowRpc((s) => !s)}>
             RPC
           </button>
-          {account ? (
-            <span className="badge badge-blue mono">{shortAddr(account)}</span>
-          ) : (
-            <button
-              className="btn-primary"
-              title={hasWallet ? '' : 'No injected wallet detected'}
-              onClick={() =>
-                connect().catch((e) => setConnectError(String(e.shortMessage ?? e.message)))
-              }
-            >
-              Connect wallet
-            </button>
-          )}
+            {account ? (
+              <span className="badge badge-blue mono">{shortAddr(account)}</span>
+            ) : (
+              <button
+                className="btn-primary"
+                title={hasWallet ? '' : 'No injected wallet detected'}
+                onClick={() =>
+                  connect().catch((e) => setConnectError(String(e.shortMessage ?? e.message)))
+                }
+              >
+                Connect wallet
+              </button>
+            )}
         </div>
       </div>
 

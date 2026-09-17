@@ -10,7 +10,7 @@ import {
 import type { Address, PublicClient } from 'viem'
 import { CHAIN, getRpcUrl, setRpcOverride } from '../config/chain'
 import { makePublicClient } from '../lib/clients'
-import { hasInjectedWallet, onWalletEvents, requestAccounts, waitForInjectedWallet, listWallets, selectWallet, type WalletEntry } from '../lib/wallet'
+import { hasInjectedWallet, onWalletEvents, requestAccounts, waitForInjectedWallet, listWallets, type WalletEntry } from '../lib/wallet'
 
 interface AppContextValue {
   chain: typeof CHAIN
@@ -23,10 +23,6 @@ interface AppContextValue {
   hasWallet: boolean
   /** Injected wallets the page can see (EIP-6963 + legacy). */
   wallets: WalletEntry[]
-  /** Currently selected wallet id, or null for the default (first). */
-  selectedWalletId: string | null
-  /** Pin which wallet connect/sign uses. */
-  chooseWallet: (id: string) => void
 
   /** Address being inspected: connected account or watch address. */
   watchAddress: Address | null
@@ -43,7 +39,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [watchAddress, setWatchAddress] = useState<Address | null>(null)
   const [hasWallet, setHasWallet] = useState(hasInjectedWallet())
   const [wallets, setWallets] = useState<WalletEntry[]>(() => listWallets())
-  const [selectedWalletId, setSelectedWalletId] = useState<string | null>(null)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const publicClient = useMemo(() => makePublicClient(), [rpcVersion])
@@ -58,11 +53,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const connect = useCallback(async () => {
     const accounts = await requestAccounts()
     setAccount(accounts[0] ?? null)
-  }, [])
-
-  const chooseWallet = useCallback((id: string) => {
-    selectWallet(id)
-    setSelectedWalletId(id)
   }, [])
 
   useEffect(() => {
@@ -86,7 +76,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return onWalletEvents({
       accountsChanged: (accounts) => setAccount(accounts[0] ?? null),
     })
-  }, [selectedWalletId])
+  }, [])
 
   const scanTarget = watchAddress ?? account
 
@@ -99,8 +89,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     connect,
     hasWallet,
     wallets,
-    selectedWalletId,
-    chooseWallet,
     watchAddress,
     setWatchAddress,
     scanTarget,
