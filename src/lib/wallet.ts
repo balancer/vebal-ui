@@ -11,6 +11,32 @@ export function hasInjectedWallet(): boolean {
   return Boolean((window as any).ethereum)
 }
 
+/**
+ * Resolves once an injected provider is available. Wallets inject `window.ethereum`
+ * at unpredictable times (after page load, after unlock), so poll briefly and also
+ * listen for EIP-6963 / legacy `ethereum#initialized` announcements.
+ */
+export function waitForInjectedWallet(timeoutMs = 3000): Promise<boolean> {
+  if (hasInjectedWallet()) return Promise.resolve(true)
+  return new Promise((resolve) => {
+    let done = false
+    const finish = (ok: boolean) => {
+      if (done) return
+      done = true
+      clearInterval(poll)
+      clearTimeout(timer)
+      window.removeEventListener('ethereum#initialized', onInit)
+      resolve(ok)
+    }
+    const onInit = () => finish(true)
+    const poll = setInterval(() => {
+      if (hasInjectedWallet()) finish(true)
+    }, 100)
+    const timer = setTimeout(() => finish(hasInjectedWallet()), timeoutMs)
+    window.addEventListener('ethereum#initialized', onInit)
+  })
+}
+
 export async function requestAccounts(): Promise<Address[]> {
   return ethereum().request({ method: 'eth_requestAccounts' })
 }

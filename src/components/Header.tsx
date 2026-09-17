@@ -27,7 +27,6 @@ export function Header() {
           ) : (
             <button
               className="btn-primary"
-              disabled={!hasWallet}
               title={hasWallet ? '' : 'No injected wallet detected'}
               onClick={() =>
                 connect().catch((e) => setConnectError(String(e.shortMessage ?? e.message)))
@@ -78,11 +77,16 @@ export function Header() {
           </div>
         </div>
       )}
-      {connectError && (
-        <div className="error-box" style={{ marginTop: 8 }}>
-          {connectError}
-        </div>
-      )}
+        {!hasWallet && (
+          <div className="muted" style={{ marginTop: 8 }}>
+            No injected wallet detected. Install MetaMask, Rabby, Rivet or similar, then reload.
+          </div>
+        )}
+        {connectError && (
+          <div className="error-box" style={{ marginTop: 8 }}>
+            {connectError}
+          </div>
+        )}
     </header>
   )
 }

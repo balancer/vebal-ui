@@ -10,7 +10,7 @@ import {
 import type { Address, PublicClient } from 'viem'
 import { CHAIN, getRpcUrl, setRpcOverride } from '../config/chain'
 import { makePublicClient } from '../lib/clients'
-import { hasInjectedWallet, onWalletEvents, requestAccounts } from '../lib/wallet'
+import { hasInjectedWallet, onWalletEvents, requestAccounts, waitForInjectedWallet } from '../lib/wallet'
 
 interface AppContextValue {
   chain: typeof CHAIN
@@ -35,6 +35,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [rpcVersion, setRpcVersion] = useState(0)
   const [account, setAccount] = useState<Address | null>(null)
   const [watchAddress, setWatchAddress] = useState<Address | null>(null)
+  const [hasWallet, setHasWallet] = useState(hasInjectedWallet())
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const publicClient = useMemo(() => makePublicClient(), [rpcVersion])
@@ -52,6 +53,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => {
+    let cancelled = false
+    waitForInjectedWallet().then((ok) => {
+      if (!cancelled) setHasWallet(ok)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  useEffect(() => {
     return onWalletEvents({
       accountsChanged: (accounts) => setAccount(accounts[0] ?? null),
     })
@@ -66,7 +77,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setRpcUrl,
     account,
     connect,
-    hasWallet: hasInjectedWallet(),
+    hasWallet,
     watchAddress,
     setWatchAddress,
     scanTarget,
