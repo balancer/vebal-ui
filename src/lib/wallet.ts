@@ -1,14 +1,93 @@
 import type { Address } from 'viem'
 import { CHAIN, getRpcUrl } from '../config/chain'
+export interface WalletEntry {
+  id: string
+  name: string
+  provider: Eip1193Provider
+}
 
-function ethereum() {
+function legacyProvider(): Eip1193Provider | null {
   const eth = (window as any).ethereum
-  if (!eth) throw new Error('No injected wallet found. Install MetaMask, Rabby or similar.')
+  if (!eth) return null
+  if (Array.isArray(eth.providers) && eth.providers.length > 0) return eth.providers[0]
   return eth
 }
 
+let selectedId: string | null = null
+
+/** Pin the wallet used for connect/sign. `null` clears the choice. */
+export function selectWallet(id: string | null): void {
+  selectedId = id
+}
+
+type Eip1193Provider = {
+  request: (args: { method: string; params?: unknown[] | object }) => Promise<unknown>
+  on?: (event: string, handler: (...args: any[]) => void) => void
+  removeListener?: (event: string, handler: (...args: any[]) => void) => void
+}
+
+interface Eip6963ProviderDetail {
+  info: { uuid: string; name: string; icon: string; rdns: string }
+  provider: Eip1193Provider
+}
+
+/** Wallets that announced themselves via EIP-6963, keyed by uuid. */
+const announced = new Map<string, Eip6963ProviderDetail>()
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('eip6963:announceProvider', (event) => {
+    const detail = (event as CustomEvent<Eip6963ProviderDetail>).detail
+    if (detail?.info?.uuid) announced.set(detail.info.uuid, detail)
+  })
+  window.dispatchEvent(new Event('eip6963:requestProvider'))
+}
+
+/** Wallets the page can currently see — EIP-6963 announcements first, then legacy injection. */
+export function listWallets(): WalletEntry[] {
+  const out: WalletEntry[] = []
+  const seen = new Set<Eip1193Provider>()
+  for (const d of announced.values()) {
+    if (seen.has(d.provider)) continue
+    seen.add(d.provider)
+    out.push({ id: d.info.uuid, name: d.info.name, provider: d.provider })
+  }
+  const legacy = legacyProvider()
+  if (legacy && !seen.has(legacy)) {
+    out.push({
+      id: 'legacy',
+      name: (legacy as any).isMetaMask ? 'MetaMask' : 'Injected wallet',
+      provider: legacy,
+    })
+  }
+  return out
+}
+
+function pickProvider(): Eip1193Provider | null {
+  const wallets = listWallets()
+  if (wallets.length === 0) return null
+  if (selectedId) {
+    const chosen = wallets.find((w) => w.id === selectedId)
+    if (chosen) return chosen.provider
+  }
+  return wallets[0].provider
+}
+
+
+function ethereum(): Eip1193Provider {
+  const provider = pickProvider()
+  if (!provider) {
+    throw new Error('No injected wallet found. Install MetaMask, Rabby, Rivet or similar.')
+  }
+  return provider
+}
+
+/** The provider connect/sign should use — the selected wallet, else the first available. */
+export function getProvider(): Eip1193Provider {
+  return ethereum()
+}
+
 export function hasInjectedWallet(): boolean {
-  return Boolean((window as any).ethereum)
+  return pickProvider() !== null
 }
 
 /**
@@ -30,6 +109,7 @@ export function waitForInjectedWallet(timeoutMs = 3000): Promise<boolean> {
     }
     const onInit = () => finish(true)
     const poll = setInterval(() => {
+      window.dispatchEvent(new Event('eip6963:requestProvider'))
       if (hasInjectedWallet()) finish(true)
     }, 100)
     const timer = setTimeout(() => finish(hasInjectedWallet()), timeoutMs)
@@ -38,11 +118,17 @@ export function waitForInjectedWallet(timeoutMs = 3000): Promise<boolean> {
 }
 
 export async function requestAccounts(): Promise<Address[]> {
-  return ethereum().request({ method: 'eth_requestAccounts' })
+  const eth = ethereum()
+  const accounts = (await eth.request({ method: 'eth_requestAccounts' })) as Address[]
+  if (accounts && accounts.length > 0) return accounts
+  // Some wallets (Rivet, locked extensions) resolve requestAccounts with [] and only
+  // expose the account via eth_accounts once the user has approved the connection.
+  const existing = (await eth.request({ method: 'eth_accounts' })) as Address[]
+  return existing ?? []
 }
 
 export async function getWalletChainId(): Promise<number> {
-  const hex: string = await ethereum().request({ method: 'eth_chainId' })
+  const hex = (await ethereum().request({ method: 'eth_chainId' })) as string
   return Number(hex)
 }
 
@@ -84,7 +170,7 @@ export function onWalletEvents(handlers: {
   accountsChanged?: (accounts: Address[]) => void
   chainChanged?: (chainIdHex: string) => void
 }): () => void {
-  const eth = (window as any).ethereum
+  const eth = pickProvider()
   if (!eth?.on) return () => {}
   const acc = handlers.accountsChanged ?? (() => {})
   const ch = handlers.chainChanged ?? (() => {})
