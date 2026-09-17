@@ -5,6 +5,8 @@ import { installMockWallet } from './mock-wallet'
 const ANVIL_PORT = 8546
 const ANVIL_RPC = `http://127.0.0.1:${ANVIL_PORT}`
 const FORK_RPC = process.env.FORK_RPC ?? 'https://ethereum-rpc.publicnode.com'
+/** Pinned fork block — keeps the test deterministic as mainnet advances. */
+const FORK_BLOCK = Number(process.env.FORK_BLOCK ?? 25_995_579)
 
 /** Expired veBAL lock: 91,896.97 BPT, end 2023-11-23. */
 const HOLDER = '0x55031F623152CfB63c60A152238B9b3B28c568B0'
@@ -35,7 +37,15 @@ async function erc20Balance(token: string, owner: string): Promise<bigint> {
 test.beforeAll(async () => {
   anvil = spawn(
     'anvil',
-    ['--fork-url', FORK_RPC, '--port', String(ANVIL_PORT), '--silent'],
+    [
+      '--fork-url',
+      FORK_RPC,
+      '--fork-block-number',
+      String(FORK_BLOCK),
+      '--port',
+      String(ANVIL_PORT),
+      '--silent',
+    ],
     { stdio: 'ignore' }
   )
   // Wait for the fork to answer.
