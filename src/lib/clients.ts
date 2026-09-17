@@ -9,6 +9,7 @@ import {
   type WalletClient,
 } from 'viem'
 import { CHAIN, getRpcUrl } from '../config/chain'
+import { getProvider } from "./wallet";
 
 export function toViemChain() {
   return defineChain({
@@ -31,11 +32,9 @@ export function makePublicClient(): PublicClient {
 }
 
 export function makeWalletClient(account: Address): WalletClient {
-  const ethereum = (window as any).ethereum
-  if (!ethereum) throw new Error('No injected wallet found')
   return createWalletClient({
     account,
     chain: toViemChain(),
-    transport: custom(ethereum),
+    transport: custom(getProvider() as any),
   })
 }
