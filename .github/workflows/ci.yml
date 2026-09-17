@@ -17,6 +17,20 @@ jobs:
       - run: npm ci
       - run: npm run build
 
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Run smoke test
+        run: npm run smoke -- --address 0x55031F623152CfB63c60A152238B9b3B28c568B0 --rpc "$RPC"
+        env:
+          RPC: ${{ secrets.FORK_RPC || 'https://ethereum-rpc.publicnode.com' }}
+
   e2e:
     runs-on: ubuntu-latest
     # Playwright's own image — browsers and system deps are baked in, so there is
