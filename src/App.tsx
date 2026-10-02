@@ -32,6 +32,13 @@ export default function App() {
         </>
       )}
 
+      <div className="muted" style={{ marginTop: 16, fontSize: 13 }}>
+        Looking to withdraw from other Balancer pools?{' '}
+        <a href="https://legacy.balancer.fi/" target="_blank" rel="noreferrer">
+          Go here...
+        </a>
+      </div>
+
       <footer className="muted" style={{ marginTop: 32, fontSize: 12 }}>
         Fully static — no backend, no subgraph, no Balancer API. Reads go to the RPC you configure.
         No USD pricing: amounts are token quantities. Unlocking requires an expired lock; the BPT
