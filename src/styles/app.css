@@ -248,6 +248,29 @@ table.amounts th {
   color: var(--text-primary);
 }
 
+.address-selector {
+  appearance: none;
+  cursor: pointer;
+  background-color: var(--bg-level2);
+  border: 2px solid var(--primary-400);
+  color: var(--gray-100);
+  padding-right: 44px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath d='m5 7 5 5 5-5' fill='none' stroke='%2393c6ff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.address-selector:hover {
+  border-color: var(--primary-300);
+}
+
+.address-selector:focus-visible {
+  border-color: var(--primary-300);
+  outline: 2px solid var(--primary-400);
+  outline-offset: 3px;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);

@@ -2,10 +2,9 @@ import { BptExitCard } from './components/BptExitCard'
 import { Header } from './components/Header'
 import { LockOverview } from './components/LockOverview'
 import { UnlockCard } from './components/UnlockCard'
-import { WatchAddressForm } from './components/WatchAddressForm'
 import { useApp } from './contexts/AppContext'
 import { useLock } from './hooks/useLock'
-import { shortAddr } from './lib/format'
+import { AddressScanCard } from "./components/AddressScanCard";
 
 export default function App() {
   const { scanTarget } = useApp()
@@ -15,22 +14,7 @@ export default function App() {
     <>
       <Header />
 
-      <div className="card">
-        <WatchAddressForm>
-          <button
-            className="btn-primary"
-            disabled={!scanTarget || data.loading}
-            onClick={data.refresh}
-          >
-            {data.loading ? 'Scanning...' : `Scan positions${scanTarget ? ` (${shortAddr(scanTarget)})` : ''}`}
-          </button>
-        </WatchAddressForm>
-        {!scanTarget && (
-          <div className="muted" style={{ marginTop: 8 }}>
-            Connect a wallet or enter an address to scan.
-          </div>
-        )}
-      </div>
+      <AddressScanCard loading={data.loading} onScan={data.refresh} />
 
       {data.error && !data.lock && (
         <div className="error-box" style={{ marginBottom: 16 }}>{data.error}</div>

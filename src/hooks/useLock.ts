@@ -12,7 +12,7 @@ export interface LockData {
   loading: boolean
   error: string
   publicClient: PublicClient
-  refresh: () => void
+  refresh: (target?: Address) => void
 }
 
 export function useLock(): LockData {
@@ -29,8 +29,8 @@ export function useLock(): LockData {
     setScanRequest({ target, client: publicClient })
   }, [publicClient])
 
-  const refresh = useCallback(() => {
-    if (scanTarget) scan(scanTarget)
+  const refresh = useCallback((target: Address | null = scanTarget) => {
+    if (target) scan(target)
   }, [scanTarget, scan])
 
   useEffect(() => {
