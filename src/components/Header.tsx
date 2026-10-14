@@ -32,7 +32,8 @@ export function Header() {
             ) : (
               <button
                 className="btn-primary"
-                title={hasWallet ? '' : 'No injected wallet detected'}
+                disabled={!hasWallet}
+                  title={hasWallet ? '' : 'No injected wallet detected'}
                 onClick={() =>
                   connect().catch((e) => setConnectError(String(e.shortMessage ?? e.message)))
                 }
@@ -83,7 +84,7 @@ export function Header() {
         </div>
       )}
 
-        {connectError && (
+        {hasWallet && connectError && (
           <div className="error-box" style={{ marginTop: 8 }}>
             {connectError}
           </div>
