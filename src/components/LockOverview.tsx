@@ -4,7 +4,7 @@ import type { LockData } from '../hooks/useLock'
 
 export function LockOverview({ data }: { data: LockData }) {
   const { scanTarget } = useApp()
-  const { lock, bptBalance, bptTotalSupply, loading, error, refresh } = data
+  const { lock, bptBalance, bptTotalSupply, error } = data
 
   return (
     <div className="card">
@@ -24,11 +24,6 @@ export function LockOverview({ data }: { data: LockData }) {
             </>
           )}
           {lock && !lock.hasLock && <span className="badge">no lock</span>}
-        </div>
-        <div className="row">
-          <button className="btn-secondary" disabled={!scanTarget || loading} onClick={refresh}>
-            {loading ? 'Loading...' : 'Refresh'}
-          </button>
         </div>
       </div>
 
