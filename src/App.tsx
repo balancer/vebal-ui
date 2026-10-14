@@ -21,8 +21,9 @@ export default function App() {
             className="btn-primary"
             disabled={!account || data.loading}
             onClick={() => {
+              if (!account) return
               setWatchAddress(null)
-              data.refresh()
+              data.scan(account)
             }}
           >
             {data.loading ? 'Scanning...' : `Scan positions${account ? ` (${shortAddr(account)})` : ''}`}
