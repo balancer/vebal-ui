@@ -5,8 +5,7 @@ import { installMockWallet } from './mock-wallet'
 const ANVIL_PORT = 8546
 const ANVIL_RPC = `http://127.0.0.1:${ANVIL_PORT}`
 const FORK_RPC = process.env.FORK_RPC ?? 'https://ethereum-rpc.publicnode.com'
-/** Pinned fork block — keeps the test deterministic as mainnet advances. */
-const FORK_BLOCK = Number(process.env.FORK_BLOCK ?? 25_995_579)
+const FORK_BLOCK = process.env.FORK_BLOCK
 
 /** Expired veBAL lock: 91,896.97 BPT, end 2023-11-23. */
 const HOLDER = '0x55031F623152CfB63c60A152238B9b3B28c568B0'
@@ -14,8 +13,8 @@ const BPT = '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56'
 
 let anvil: ChildProcess
 
-async function rpc(method: string, params: unknown[] = []) {
-  const res = await fetch(ANVIL_RPC, {
+async function rpc(method: string, params: unknown[] = [], url = ANVIL_RPC) {
+  const res = await fetch(url, {
     method: 'POST',
     signal: AbortSignal.timeout(5000),
     headers: { 'content-type': 'application/json' },
@@ -75,11 +74,15 @@ test('unlock veBAL then exit the returned BPT', async ({ page }) => {
   expect(weth).toBeGreaterThan(0n)
 })
 async function startAnvil() {
+  // Stay within the public RPC's retained state; FORK_BLOCK allows explicit reproduction.
+  const forkBlock = FORK_BLOCK === undefined
+    ? Number(BigInt((await rpc('eth_getBlockByNumber', ['finalized', false], FORK_RPC)).number))
+    : Number(FORK_BLOCK)
   let output = ''
   let failure = ''
   anvil = spawn('anvil', [
     '--fork-url', FORK_RPC,
-    '--fork-block-number', String(FORK_BLOCK),
+    '--fork-block-number', String(forkBlock),
     '--host', '127.0.0.1',
     '--port', String(ANVIL_PORT),
     '--silent',
