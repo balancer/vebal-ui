@@ -1,12 +1,9 @@
-import { useState } from 'react'
-import { isAddress, type Address } from 'viem'
 import { useApp } from '../contexts/AppContext'
 import { fmtAmount, fmtDate, fmtDuration, fmtPct, shortAddr } from '../lib/format'
 import type { LockData } from '../hooks/useLock'
 
 export function LockOverview({ data }: { data: LockData }) {
-  const { account, scanTarget, watchAddress, setWatchAddress } = useApp()
-  const [watchInput, setWatchInput] = useState('')
+  const { scanTarget } = useApp()
   const { lock, bptBalance, bptTotalSupply, loading, error, refresh } = data
 
   return (
@@ -35,39 +32,7 @@ export function LockOverview({ data }: { data: LockData }) {
         </div>
       </div>
 
-      <div className="row" style={{ marginTop: 12, flexWrap: 'wrap' }}>
-        <input
-          style={{ flex: 1, minWidth: 220 }}
-          className="mono"
-          placeholder="...or watch any address (read-only)"
-          value={watchInput}
-          onChange={(e) => setWatchInput(e.target.value)}
-        />
-        <button
-          className="btn-secondary"
-          disabled={!isAddress(watchInput)}
-          onClick={() => setWatchAddress(watchInput as Address)}
-        >
-          Watch
-        </button>
-        {watchAddress && (
-          <button
-            className="btn-secondary"
-            onClick={() => {
-              setWatchAddress(null)
-              setWatchInput('')
-            }}
-          >
-            Clear watch ({shortAddr(watchAddress)})
-          </button>
-        )}
-      </div>
 
-      {!account && !watchAddress && (
-        <div className="muted" style={{ marginTop: 8 }}>
-          Connect a wallet or enter an address to inspect a lock.
-        </div>
-      )}
 
       {error && (
         <div className="error-box" style={{ marginTop: 12 }}>

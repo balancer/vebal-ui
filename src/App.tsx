@@ -5,24 +5,37 @@ import { UnlockCard } from './components/UnlockCard'
 import { WatchAddressForm } from './components/WatchAddressForm'
 import { useApp } from './contexts/AppContext'
 import { useLock } from './hooks/useLock'
+import { shortAddr } from "./lib/format";
 
 export default function App() {
-  const { scanTarget } = useApp()
+  const { account, scanTarget, setWatchAddress } = useApp()
   const data = useLock()
 
   return (
     <>
       <Header />
 
-      {!scanTarget && (
-        <div className="card">
-          <div className="muted">
-            Connect an injected wallet, or paste any address below to inspect its veBAL lock
-            read-only.
-          </div>
-          <WatchAddressForm />
-        </div>
-      )}
+      <div className="card">
+        <WatchAddressForm>
+          <button
+            className="btn-primary"
+            disabled={!account || data.loading}
+            onClick={() => {
+              setWatchAddress(null)
+              data.refresh()
+            }}
+          >
+            {data.loading ? 'Scanning...' : `Scan positions${account ? ` (${shortAddr(account)})` : ''}`}
+          </button>
+          </WatchAddressForm>
+          {!scanTarget && (
+          <>
+            <div className="muted" style={{ marginTop: 8 }}>
+              Connect a wallet or enter an address to scan.
+            </div>
+                      </>
+        )}
+      </div>
 
       {scanTarget && (
         <>

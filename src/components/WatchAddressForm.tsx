@@ -1,18 +1,19 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { isAddress, type Address } from 'viem'
 import { useApp } from '../contexts/AppContext'
+import { shortAddr } from "../lib/format";
 
-/** Watch-any-address entry, shown before a scan target exists. */
-export function WatchAddressForm() {
-  const { setWatchAddress } = useApp()
+export function WatchAddressForm({ children }: { children?: ReactNode }) {
+  const { watchAddress, setWatchAddress } = useApp()
   const [input, setInput] = useState('')
 
   return (
-    <div className="row" style={{ marginTop: 12, flexWrap: 'wrap' }}>
+    <div className="row" style={{ flexWrap: 'wrap' }}>
+      {children}
       <input
         style={{ flex: 1, minWidth: 220 }}
         className="mono"
-        placeholder="0x... (read-only)"
+        placeholder="...or watch any address (read-only)"
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
@@ -23,6 +24,17 @@ export function WatchAddressForm() {
       >
         Watch
       </button>
+      {watchAddress && (
+        <button
+          className="btn-secondary"
+          onClick={() => {
+            setWatchAddress(null)
+            setInput('')
+          }}
+        >
+          Clear watch ({shortAddr(watchAddress)})
+        </button>
+      )}
     </div>
   )
 }
