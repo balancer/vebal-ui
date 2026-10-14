@@ -20,6 +20,7 @@ interface AppContextValue {
 
   account: Address | null
   connect: () => Promise<void>
+  disconnect: () => void
   hasWallet: boolean
   /** Injected wallets the page can see (EIP-6963 + legacy). */
   wallets: WalletEntry[]
@@ -29,6 +30,7 @@ interface AppContextValue {
   setWatchAddress: (addr: Address | null) => void
   scanTarget: Address | null
   readOnly: boolean
+
 }
 
 const AppContext = createContext<AppContextValue | null>(null)
@@ -54,6 +56,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const accounts = await requestAccounts()
     setAccount(accounts[0] ?? null)
   }, [])
+
+  const disconnect = useCallback(() => setAccount(null), [])
 
   useEffect(() => {
     let cancelled = false
@@ -87,6 +91,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setRpcUrl,
     account,
     connect,
+    disconnect,
     hasWallet,
     wallets,
     watchAddress,

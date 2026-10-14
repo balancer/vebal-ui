@@ -3,7 +3,7 @@ import { useApp } from '../contexts/AppContext'
 import { shortAddr } from '../lib/format'
 
 export function Header() {
-  const { account, connect, hasWallet, rpcUrl, setRpcUrl } = useApp()
+  const { account, connect, disconnect, hasWallet, rpcUrl, setRpcUrl } = useApp()
   const [showRpc, setShowRpc] = useState(false)
   const [rpcInput, setRpcInput] = useState('')
   const [connectError, setConnectError] = useState('')
@@ -28,7 +28,18 @@ export function Header() {
             RPC
           </button>
           {account ? (
-            <span className="badge badge-blue mono">{shortAddr(account)}</span>
+            <>
+              <span className="badge badge-blue mono">{shortAddr(account)}</span>
+              <button
+                className="btn-secondary"
+                onClick={() => {
+                  disconnect()
+                  setConnectError('')
+                }}
+              >
+                Disconnect
+              </button>
+            </>
           ) : (
             <button
               className="btn-primary"
