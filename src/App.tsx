@@ -24,7 +24,7 @@ export default function App() {
         <>
           <LockOverview data={data} />
           <UnlockCard data={data} />
-          <BptExitCard data={data} />
+                      {(data.lock.hasLock || data.bptBalance > 0n) && <BptExitCard data={data} />}
         </>
       )}
 
