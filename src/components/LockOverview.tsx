@@ -32,8 +32,6 @@ export function LockOverview({ data }: { data: LockData }) {
         </div>
       </div>
 
-
-
       {error && (
         <div className="error-box" style={{ marginTop: 12 }}>
           {error}

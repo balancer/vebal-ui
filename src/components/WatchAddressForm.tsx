@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from 'react'
 import { isAddress, type Address } from 'viem'
 import { useApp } from '../contexts/AppContext'
-import { shortAddr } from "../lib/format";
+import { shortAddr } from '../lib/format'
 
 export function WatchAddressForm({ children }: { children?: ReactNode }) {
   const { watchAddress, setWatchAddress } = useApp()

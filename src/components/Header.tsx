@@ -16,38 +16,38 @@ export function Header() {
             veBAL Unlock
           </h1>
           <div className="muted">Withdraw an expired veBAL lock and exit the returned BPT</div>
-            <div className="muted" style={{ marginTop: 4 }}>
-              Looking to withdraw from other Balancer pools?{' '}
-              <a href="https://legacy.balancer.fi/" target="_blank" rel="noreferrer">
-                Use the Balancer exit UI
-              </a>
-            </div>
+          <div className="muted" style={{ marginTop: 4 }}>
+            Looking to withdraw from other Balancer pools?{' '}
+            <a href="https://legacy.balancer.fi/" target="_blank" rel="noreferrer">
+              Use the Balancer exit UI
+            </a>
+          </div>
         </div>
         <div className="row" style={{ flexWrap: 'wrap' }}>
           <button className="btn-secondary" onClick={() => setShowRpc((s) => !s)}>
             RPC
           </button>
-            {account ? (
-              <span className="badge badge-blue mono">{shortAddr(account)}</span>
-            ) : (
-              <button
-                className="btn-primary"
-                disabled={!hasWallet}
-                  title={hasWallet ? '' : 'No injected wallet detected'}
-                onClick={() =>
-                  connect().catch((e) => setConnectError(String(e.shortMessage ?? e.message)))
-                }
-              >
-                Connect wallet
-              </button>
-            )}
+          {account ? (
+            <span className="badge badge-blue mono">{shortAddr(account)}</span>
+          ) : (
+            <button
+              className="btn-primary"
+              disabled={!hasWallet}
+              title={hasWallet ? '' : 'No injected wallet detected'}
+              onClick={() =>
+                connect().catch((e) => setConnectError(String(e.shortMessage ?? e.message)))
+              }
+            >
+              Connect wallet
+            </button>
+          )}
         </div>
       </div>
 
       {showRpc && (
         <div className="card" style={{ marginTop: 12 }}>
           <div className="muted" style={{ marginBottom: 8 }}>
-RPC for Ethereum (stored locally; used for all reads)
+            RPC for Ethereum (stored locally; used for all reads)
           </div>
           <div className="row">
             <input
@@ -83,11 +83,11 @@ RPC for Ethereum (stored locally; used for all reads)
         </div>
       )}
 
-        {hasWallet && connectError && (
-          <div className="error-box" style={{ marginTop: 8 }}>
-            {connectError}
-          </div>
-        )}
+      {hasWallet && connectError && (
+        <div className="error-box" style={{ marginTop: 8 }}>
+          {connectError}
+        </div>
+      )}
     </header>
   )
 }
