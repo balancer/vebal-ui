@@ -56,7 +56,7 @@ export function BptExitCard({ data }: { data: LockData }) {
       <div className="row" style={{ flexWrap: 'wrap' }}>
         <strong>Exit 80BAL-20WETH BPT</strong>
         <span className="muted">
-          Proportional exit — you receive BAL and WETH in the pool's ratio. No auto-unwrap.
+          Proportional exit — you receive BAL and WETH in the pool's ratio.
         </span>
       </div>
 
