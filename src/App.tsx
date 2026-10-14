@@ -8,7 +8,7 @@ import { useLock } from './hooks/useLock'
 import { shortAddr } from './lib/format'
 
 export default function App() {
-  const { account, scanTarget, setWatchAddress } = useApp()
+  const { scanTarget } = useApp()
   const data = useLock()
 
   return (
@@ -19,14 +19,10 @@ export default function App() {
         <WatchAddressForm>
           <button
             className="btn-primary"
-            disabled={!account || data.loading}
-            onClick={() => {
-              if (!account) return
-              setWatchAddress(null)
-              data.scan(account)
-            }}
+            disabled={!scanTarget || data.loading}
+            onClick={data.refresh}
           >
-            {data.loading ? 'Scanning...' : `Scan positions${account ? ` (${shortAddr(account)})` : ''}`}
+            {data.loading ? 'Scanning...' : `Scan positions${scanTarget ? ` (${shortAddr(scanTarget)})` : ''}`}
           </button>
         </WatchAddressForm>
         {!scanTarget && (

@@ -13,7 +13,6 @@ export interface LockData {
   error: string
   publicClient: PublicClient
   refresh: () => void
-  scan: (target: Address) => void
 }
 
 export function useLock(): LockData {
@@ -85,6 +84,5 @@ export function useLock(): LockData {
     error,
     publicClient,
     refresh,
-    scan,
   }
 }
