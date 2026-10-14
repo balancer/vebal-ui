@@ -36,7 +36,11 @@ export default function App() {
         )}
       </div>
 
-      {scanTarget && (
+      {data.error && !data.lock && (
+        <div className="error-box" style={{ marginBottom: 16 }}>{data.error}</div>
+      )}
+
+      {scanTarget && data.lock && (
         <>
           <LockOverview data={data} />
           <UnlockCard data={data} />
