@@ -82,11 +82,7 @@ export function Header() {
           </div>
         </div>
       )}
-        {!hasWallet && (
-          <div className="muted" style={{ marginTop: 8 }}>
-            No injected wallet detected. Install MetaMask, Rabby, Rivet or similar, then reload.
-          </div>
-        )}
+
         {connectError && (
           <div className="error-box" style={{ marginTop: 8 }}>
             {connectError}
