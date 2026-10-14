@@ -16,6 +16,12 @@ export function Header() {
             veBAL Unlock
           </h1>
           <div className="muted">Withdraw an expired veBAL lock and exit the returned BPT</div>
+            <div className="muted" style={{ marginTop: 4 }}>
+              Looking to withdraw from other Balancer pools?{' '}
+              <a href="https://legacy.balancer.fi/" target="_blank" rel="noreferrer">
+                Use the Balancer exit UI
+              </a>
+            </div>
         </div>
         <div className="row" style={{ flexWrap: 'wrap' }}>
           <span className="badge">Ethereum</span>
