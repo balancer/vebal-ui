@@ -33,9 +33,11 @@ export default function App() {
       )}
 
       <footer className="muted" style={{ marginTop: 32, fontSize: 12 }}>
-        Fully static — no backend, no subgraph, no Balancer API. Reads go to the RPC you configure.
-        No USD pricing: amounts are token quantities. Unlocking requires an expired lock; the BPT
-        exit pays out BAL and WETH as-is, with no auto-unwrap.
+        veBAL withdrawals require an expired lock. BPT exits are proportional and return BAL and
+        WETH. USD pricing is unavailable — amounts are shown as token
+        quantities.
+        <br />
+        This site is fully static; it only talks to the RPC you configure.
       </footer>
     </>
   )
