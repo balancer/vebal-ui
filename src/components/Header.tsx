@@ -24,7 +24,6 @@ export function Header() {
             </div>
         </div>
         <div className="row" style={{ flexWrap: 'wrap' }}>
-          <span className="badge">Ethereum</span>
           <button className="btn-secondary" onClick={() => setShowRpc((s) => !s)}>
             RPC
           </button>
