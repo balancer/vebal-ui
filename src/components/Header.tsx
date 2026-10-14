@@ -47,8 +47,7 @@ export function Header() {
       {showRpc && (
         <div className="card" style={{ marginTop: 12 }}>
           <div className="muted" style={{ marginBottom: 8 }}>
-            RPC endpoint (stored locally; used for all reads and added to your wallet when
-            switching chains)
+RPC for Ethereum (stored locally; used for all reads)
           </div>
           <div className="row">
             <input
